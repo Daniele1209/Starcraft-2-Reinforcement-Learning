@@ -10,10 +10,24 @@ import sc2
 from sc2.ids.unit_typeid import UnitTypeId
 import random
 
+# This is a minimal, basic implementation of a Protoss bot
+# The bot is based on the Starcraft 2 AI with Python from sentdex tutorial
 
 class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
+
+    def print_stats(self, iteration):
+         print(f"{iteration}, n_workers: {self.workers.amount}, n_idle_workers: {self.workers.idle.amount},", \
+            f"minerals: {self.minerals}, gas: {self.vespene}, cannons: {self.structures(UnitTypeId.PHOTONCANNON).amount},", \
+            f"pylons: {self.structures(UnitTypeId.PYLON).amount}, nexus: {self.structures(UnitTypeId.NEXUS).amount}", \
+            f"gateways: {self.structures(UnitTypeId.GATEWAY).amount}, cybernetics cores: {self.structures(UnitTypeId.CYBERNETICSCORE).amount}", \
+            f"stargates: {self.structures(UnitTypeId.STARGATE).amount}, voidrays: {self.units(UnitTypeId.VOIDRAY).amount}, supply: {self.supply_used}/{self.supply_cap}")
+
+
     async def on_step(self, iteration: int): # on_step is a method that is called every step of the game.
-        print(f"This is my bot in iteration {iteration}") # prints out the iteration number (ie: the step).
+        # print relevant stats
+        self.print_stats(iteration) 
+
+        await self.distribute_workers()
 
         if self.townhalls:
             nexus = self.townhalls.random
