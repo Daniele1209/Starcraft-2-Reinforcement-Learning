@@ -1,3 +1,4 @@
+from lib2to3.pgen2.tokenize import untokenize
 from re import L
 from unittest.util import unorderable_list_difference
 from sc2.bot_ai import BotAI  # parent class we inherit from
@@ -29,10 +30,14 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
 
         await self.distribute_workers()
 
+        # ----- BUILDING AND TRAINING -----
+
         if self.townhalls:
             nexus = self.townhalls.random
 
-            if nexus.is_idle and self.can_afford(UnitTypeId.PROBE):
+            # ----- RESOURCES AND WORKERS -----
+
+            if nexus.is_idle and self.can_afford(UnitTypeId.PROBE) and self.supply_left > 4:
                 nexus.train(UnitTypeId.PROBE)
 
             elif not self.structures(UnitTypeId.PYLON) and self.already_pending(UnitTypeId.PYLON) == 0:
@@ -45,7 +50,16 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                     target_pylon = self.structures(UnitTypeId.PYLON).closest_to(self.enemy_start_locations[0])
                     # build towards the enemy start location
                     pos = target_pylon.position.towards(self.enemy_start_locations[0], random.randrange(8, 15))
-                    await self.build(UnitTypeId.PYLON, near=pos)
+                    await self.build(UnitTypeId.PYLON, near=nexus)
+
+            # build assimilators for vespene gas
+            elif self.structures(UnitTypeId.ASSIMILATOR).amount <= 2:
+                vespenes = self.vespene_geyser.closer_than(15, nexus)
+                for vespene in vespenes:
+                    if self.can_afford(UnitTypeId.ASSIMILATOR) and not self.already_pending(UnitTypeId.ASSIMILATOR):
+                        await self.build(UnitTypeId.ASSIMILATOR, vespene)
+
+            # ----- DEFENSE BUILDING -----
 
             # build cannons for defense -> we need a forge first
             elif not self.structures(UnitTypeId.FORGE):
@@ -56,11 +70,40 @@ class IncrediBot(BotAI): # inhereits from BotAI (part of BurnySC2)
                 if self.can_afford(UnitTypeId.PHOTONCANNON):
                     await(self.build(UnitTypeId.PHOTONCANNON, near=nexus))
 
+            # ----- OFFENSE BUILDING AND TRAINING ----- 
+
+            # build in order to get the stargate - need these 3 building
+            buildings = [UnitTypeId.GATEWAY, UnitTypeId.CYBERNETICSCORE, UnitTypeId.STARGATE]
+
+            for building in buildings:
+                if not self.structures(building) and self.already_pending(building) == 0:
+                    if self.can_afford(building):
+                        await self.build(building, near=self.structures(UnitTypeId.PYLON).closest_to(nexus))
+                    break
+
+            # Unit - Voidrays
+            if self.structures(UnitTypeId.VOIDRAY).amount < 10 and self.can_afford(UnitTypeId.VOIDRAY):
+                for stargate in self.structures(UnitTypeId.STARGATE).ready.idle:
+                    stargate.train(UnitTypeId.VOIDRAY)
 
         else:
             if self.can_afford(UnitTypeId.NEXUS):
                 await self.expand_now()
+        
+        # ----- ACTIONS -----
 
+        target_list = [self.enemy_units, self.enemy_structures]
+
+        # voidray attack
+        if self.units(UnitTypeId.VOIDRAY).amount >= 3:
+            for target in target_list:
+                if target:
+                    for unit in self.units(UnitTypeId.VOIDRAY).idle:
+                        unit.attack(random.choice(target))
+                # if we do not know any target for enemy, choose enemy start location
+                else:
+                    for unit in self.units(UnitTypeId.VOIDRAY).idle:
+                        unit.attack(self.enemy_start_locations[0])
 
 run_game(  # run_game is a function that runs the game.
     maps.get("2000AtmospheresAIE"), # the map we are playing on
