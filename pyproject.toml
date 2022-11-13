@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "sc2-rl"
+version = "0.1.0"
+description = "collection of sc2 bots + rl"
+authors = ["Moș Daniele <dany.mosh@yahoo.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "sc2_rl"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+burnysc2 = "^6.0.6"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
