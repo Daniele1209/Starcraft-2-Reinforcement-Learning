@@ -10,6 +10,8 @@ import sc2
 
 from sc2.ids.unit_typeid import UnitTypeId
 import random
+import numpy as np
+import math
 
 # This is a minimal, basic implementation of a Protoss bot
 # The bot is based on the Starcraft 2 AI with Python from sentdex tutorial
