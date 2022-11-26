@@ -34,7 +34,7 @@ For the agent actions we are going to focus on the Macro actions, as the micro a
 
 The actions are as follows:
 
-### Expand:
+### `Expand`:
 
 - Expand to a new location (build a new nexus)
 - Create worker units (Probes)
@@ -42,7 +42,7 @@ The actions are as follows:
 - Start exploiting the available minerals
 - Build assimilators on the closest Vespine Geysers
 
-### Build:
+### `Build`:
 
 - Build structures that are needed in order to produce desired units
 
@@ -50,17 +50,17 @@ The actions are as follows:
 
 Structure tree for Protos 
 
-### Recruit:
+### `Recruit`:
 
 - Check if it can afford certain types of units
 - Recruit units
 
-### Scout:
+### `Scout`:
 
 - Account for the enemy scouts
 - Send a dummy probe to the enemy location
 
-### Attack:
+### `Attack`:
 
 - Gather all units (or a certain formation)
 - Attack known enemy units
@@ -68,7 +68,7 @@ Structure tree for Protos
 - Seek the enemy at the known start location
 - Execute known attack strategies (if there are any)
 
-### Retreat:
+### `Retreat`:
 
 - Return the unit to base location (start location)
 
@@ -86,13 +86,13 @@ In this case we will try different  combinations of rewards and reward amounts i
 
 For out training we will use a custom Stable Baselines 3 environment. There are many algorithms for training a good agent, but we would like to focus on 2 of the most used and popular:  **PPO ([Proximal Policy Optimization](https://openai.com/blog/openai-baselines-ppo/))** and **A2C ([Advantage Actor Critic](https://huggingface.co/blog/deep-rl-a2c))**, and compare the results.
 
-### PPO:
+### `PPO`:
 
 It is one of the most popular approaches to RL and it presents better results than state-of-the-art works, while managing to keep it’s complexity low. It has become the go-to RL algorithm at [OpenAI](https://openai.com/), being used for RL in robotics and video games.
 
 It has an *attention* function that helps estimating how good a certain action is compared to an average action for a specific state, by that, it manages to reduce the considerable variation between the old policy and the new policy.
 
-### A2C:
+### `A2C`:
 
 It combines 2 fundamental RL algorithms: Policy Based and Value Based,  resulting in a hybrid architecture, where the 2 algorithms help stabilize the training, being able to reduce variance.
 
