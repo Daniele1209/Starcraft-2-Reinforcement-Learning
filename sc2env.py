@@ -5,6 +5,7 @@ import subprocess
 import pickle
 import time
 import os
+import wandb
 
 class Sc2Env(gym.Env):
 	"""Custom Environment that follows gym interface"""
@@ -82,6 +83,9 @@ class Sc2Env(gym.Env):
 		observation = map
 		# split the data into Map, current reward, performed action and the state of the game 
 		data = {"state": map, "reward": 0, "action": None, "done": False}  # empty action waiting for the next one!
+		
+		wandb.log({"reward": data["reward"]})
+
 		with open('state_rwd_action.pkl', 'wb') as f:
 			pickle.dump(data, f)
 
