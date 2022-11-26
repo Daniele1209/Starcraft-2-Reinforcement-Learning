@@ -12,7 +12,7 @@ models_dir = f"models/{model_name}/"
 logdir = f"logs/{model_name}/"
 
 
-conf_dict = {"Model": "v1",
+conf_dict = {"Model": "v1-ppo",
              "Machine": "Main",
              "policy":"MlpPolicy",
              "model_save_name": model_name}
