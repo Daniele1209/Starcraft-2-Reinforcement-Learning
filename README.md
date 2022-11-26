@@ -46,7 +46,7 @@ The actions are as follows:
 
 - Build structures that are needed in order to produce desired units
 
-![Structure tree for Protos ](images/structure-tree-protos.png)
+![Structure tree for Protos ](images/structure-tree-protoss.png)
 
 Structure tree for Protos 
 
