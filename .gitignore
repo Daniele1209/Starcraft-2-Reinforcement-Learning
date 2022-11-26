@@ -116,3 +116,4 @@ dmypy.json
 logs
 wandb
 models
+state_rwd_action.pkl
