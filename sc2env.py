@@ -80,10 +80,11 @@ class Sc2Env(gym.Env):
 		print("RESETTING ENVIRONMENT!!!!!!!!!!!!!")
 		map = np.zeros((224, 224, 3), dtype=np.uint8)
 		observation = map
+		# split the data into Map, current reward, performed action and the state of the game 
 		data = {"state": map, "reward": 0, "action": None, "done": False}  # empty action waiting for the next one!
 		with open('state_rwd_action.pkl', 'wb') as f:
 			pickle.dump(data, f)
 
-		# run incredibot-sct.py non-blocking:
-		subprocess.Popen(['python', 'incredibot-sct.py'])
+		# run the bot script
+		subprocess.Popen(['python', 'rl_bot_script.py'])
 		return observation  # reward, done, info can't be included
