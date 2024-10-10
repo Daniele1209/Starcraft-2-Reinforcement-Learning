@@ -8,9 +8,19 @@ readme = "README.md"
 packages = [{include = "sc2_rl"}]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9,<3.12"
 burnysc2 = "^6.0.6"
+stable-baselines3 = "^2.3.2"
+gym = "^0.26.2"
+wandb = "^0.18.3"
+tensorboard = "^2.18.0"
+python-dotenv = "^1.0.1"
+shimmy = "^0.2.1"
+opencv-python = "^4.10.0.84"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+sc2-rl = "sc2_rl.main:main"

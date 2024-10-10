@@ -4,6 +4,7 @@ from sc2env import Sc2Env
 import time
 from wandb.integration.sb3 import WandbCallback
 import wandb
+from dotenv import load_dotenv
 
 
 model_name = f"{int(time.time())}"
@@ -17,6 +18,9 @@ conf_dict = {"Model": "v1-ppo",
              "policy":"MlpPolicy",
              "model_save_name": model_name}
 
+# load credentials for logging
+load_dotenv()
+wandb.login(key=os.getenv("WANDB_API_KEY"))
 
 run = wandb.init(
     project=f'SC2RL',
